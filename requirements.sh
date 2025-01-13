@@ -1,13 +1,13 @@
 #!/bin/bash
 
 echo "[TASK 1] update hosts"
-echo '192.168.10.100 master master' | tee -a /etc/hosts
+echo '192.168.56.100 master master' | tee -a /etc/hosts
 init=2
 stop=$1+1
 for (( c=$init; c<=$stop; c++ ))
 do
   worker="$(($c-1))"
-  echo "192.168.10.$c worker$worker worker$worker" | tee -a /etc/hosts
+  echo "192.168.56.$c worker$worker worker$worker" | tee -a /etc/hosts
 done
 
 
@@ -38,9 +38,9 @@ swapoff -a
 # Installing Kubernetes
 echo "[TASK 5] Kubernetes"
 mkdir -p -m 755 /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update -y
 apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
